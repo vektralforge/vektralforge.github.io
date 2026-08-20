@@ -1,0 +1,708 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>VektralForge — Open Source Data Lakehouse with Built-In Lineage</title>
+  <meta name="description"
+    content="VektralForge integrates Apache Airflow, Spark, Delta Lake, Trino and Superset into one deployable, open source data lakehouse — with end-to-end data lineage via OpenLineage and Marquez. Apache 2.0, no CLA.">
+  <meta name="keywords"
+    content="open source data lakehouse, Apache Airflow, Apache Spark, Delta Lake, Trino, data lineage, OpenLineage, data engineering, self-hosted data platform, Apache 2.0">
+  <meta name="author" content="The VektralForge Authors">
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="https://vektralforge.org/">
+  <!-- Open Graph / social -->
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="VektralForge">
+  <meta property="og:title" content="VektralForge — Open Source Data Lakehouse with Built-In Lineage">
+  <meta property="og:description"
+    content="Airflow, Spark, Delta Lake, Trino and Superset in one deployable stack, with end-to-end lineage. Apache 2.0, no CLA, sponsor-independent governance.">
+  <meta property="og:url" content="https://vektralforge.org/">
+  <meta property="og:image" content="https://vektralforge.org/assets/img/og-image.png">
+  <meta property="og:locale" content="en_US">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="VektralForge — Open Source Data Lakehouse with Built-In Lineage">
+  <meta name="twitter:description"
+    content="Airflow, Spark, Delta Lake, Trino and Superset in one deployable stack, with end-to-end lineage. Apache 2.0, no CLA.">
+  <meta name="twitter:image" content="https://vektralforge.org/assets/img/og-image.png">
+  <meta name="theme-color" content="#183b7a">
+  <!-- Favicons -->
+  <link rel="icon" href="assets/img/favicon.ico" sizes="48x48">
+  <link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="assets/img/apple-touch-icon.png">
+  <link rel="manifest" href="assets/img/site.webmanifest">
+  <!-- Styles -->
+  <link rel="stylesheet" href="assets/vendor/bootstrap/css/bootstrap.min.css">
+  <link rel="stylesheet" href="assets/vendor/bootstrap-icons/bootstrap-icons.min.css">
+  <link rel="stylesheet" href="assets/css/main.css">
+  <!-- Structured data for search & AI indexing -->
+  <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "SoftwareApplication",
+  "name": "VektralForge",
+  "alternateName": "vektralforge",
+  "description": "Open source data lakehouse integrating Apache Airflow, Spark, Delta Lake, Trino and Superset in one deployable stack, with end-to-end data lineage via OpenLineage and Marquez.",
+  "url": "https://vektralforge.org/",
+  "applicationCategory": "DeveloperApplication",
+  "operatingSystem": "Linux, Kubernetes",
+  "license": "https://www.apache.org/licenses/LICENSE-2.0",
+  "codeRepository": "https://github.com/vektralforge/vektralforge",
+  "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
+  "author": {
+    "@type": "Organization",
+    "name": "The VektralForge Authors"
+  },
+  "sponsor": {
+    "@type": "Organization",
+    "name": "Aleph Server",
+    "url": "https://alephserver.cl"
+  }
+}
+</script>
+</head>
+
+<body>
+
+  <a class="visually-hidden-focusable" href="#main" data-i18n="a11y.skip">Skip to content</a>
+
+  <!-- Navbar -->
+  <header>
+    <nav class="navbar navbar-expand-lg fixed-top" aria-label="Primary">
+      <div class="container">
+        <a class="navbar-brand" href="#top" aria-label="VektralForge home">
+          <svg width="26" height="26" viewBox="34 56 124 91.5" role="img" aria-hidden="true">
+            <polygon points="40,140 62,140 72.7,100 50.7,100" fill="#7E3A1E" />
+            <polygon points="74,140 96,140 112.6,78 90.6,78" fill="#B4552D" />
+            <polygon points="108,140 130,140 152.5,56 130.5,56" fill="#D2703F" />
+            <path d="M 34 146.5 L 158 146.5" stroke="#5B7076" stroke-width="2" stroke-linecap="round" fill="none" />
+          </svg>
+          <span>Vektral<em>Forge</em></span>
+        </a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#nav" aria-controls="nav"
+          aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="nav">
+          <ul class="navbar-nav ms-auto" data-bs-spy="scroll">
+            <li class="nav-item"><a class="nav-link" href="#about" data-i18n="nav.platform">Platform</a></li>
+            <li class="nav-item"><a class="nav-link" href="#architecture" data-i18n="nav.architecture">Architecture</a>
+            </li>
+            <li class="nav-item"><a class="nav-link" href="#sponsors" data-i18n="nav.sponsors">Sponsors</a></li>
+            <li class="nav-item"><a class="nav-link" href="#documentation" data-i18n="nav.docs">Docs</a></li>
+            <li class="nav-item"><a class="nav-link" href="#roadmap" data-i18n="nav.roadmap">Roadmap</a></li>
+            <li class="nav-item"><a class="nav-link" href="#community" data-i18n="nav.community">Community</a></li>
+          </ul>
+          <div class="d-flex align-items-center gap-3 mt-3 mt-lg-0 ms-lg-3">
+            <div class="lang-switch" role="group" aria-label="Language / Idioma">
+              <button type="button" class="lang-btn is-active" data-lang-choice="en" aria-current="true">Eng</button>
+              <span class="lang-sep" aria-hidden="true">/</span>
+              <button type="button" class="lang-btn" data-lang-choice="es" aria-current="false">Esp</button>
+            </div>
+            <a class="btn btn-outline-nav d-inline-flex align-items-center gap-2"
+              href="https://github.com/vektralforge/vektralforge" target="_blank" rel="noopener"><i class="bi bi-github"
+                aria-hidden="true"></i><span data-i18n="nav.githubBtn">View on GitHub</span></a>
+          </div>
+        </div>
+      </div>
+    </nav>
+  </header>
+
+  <main id="main">
+    <!-- 1. Hero -->
+    <section id="top" class="hero">
+      <div class="container">
+        <div class="row align-items-center gy-5">
+          <div class="col-lg-6">
+            <span class="badge-pill" data-i18n="hero.badgePill"><span class="dot" aria-hidden="true"></span>Open Source
+              · <span class="apache-mark"><i class="bi bi-feather" aria-hidden="true"></i>Apache 2.0</span> · <span
+                class="badge-emph"><i class="bi bi-patch-check-fill" aria-hidden="true"></i>no CLA</span></span>
+            <h1 data-i18n="hero.h1">The open source data lakehouse<br>with <span class="accent">lineage built in</span>.
+            </h1>
+            <p class="lede" data-i18n="hero.lede">VektralForge integrates Apache Airflow, Spark, Delta Lake, Trino and
+              Superset into one deployable stack, with end-to-end data lineage via OpenLineage and Marquez. Run it
+              locally with Docker Compose; deploy it to production on K3s.</p>
+            <div class="d-flex flex-wrap gap-3 mb-4">
+              <a class="btn btn-primary-brand btn-lg d-inline-flex align-items-center gap-2" href="#quickstart"
+                data-i18n="hero.cta"><i class="bi bi-rocket-takeoff" aria-hidden="true"></i>Quick Start</a>
+            </div>
+            <div class="d-flex flex-nowrap gap-3 trust-trio" aria-label="Why VektralForge">
+              <div><i class="bi bi-infinity" aria-hidden="true"></i><span data-i18n="hero.trust.free">100% Free,
+                  Forever</span></div>
+              <div><i class="bi bi-hdd-rack" aria-hidden="true"></i><span
+                  data-i18n="hero.trust.selfhosted">Self-Hosted</span></div>
+              <div><i class="bi bi-shield-fill-check" aria-hidden="true"></i><span
+                  data-i18n="hero.trust.production">Production Ready</span></div>
+              <div><i class="bi bi-puzzle-fill" aria-hidden="true"></i><span data-i18n="hero.trust.flexible">Flexible
+                  setup</span></div>
+            </div>
+          </div>
+          <div class="col-lg-6">
+            <div class="flow-card" id="product-flow"
+              aria-label="How VektralForge moves data: from your data sources, through the K3s-based pipeline, to what your team ships">
+              <div class="cols">
+
+                <div class="col col-sources">
+                  <p class="col-h" data-i18n="hero.diagram.yourData">Your Data</p>
+                  <div class="src-grid">
+                    <div class="node"><svg viewBox="0 0 16 16" aria-hidden="true">
+                        <path d="M5 2v4M11 2v4M4 6h8v2a4 4 0 0 1-8 0V6Z" />
+                        <path d="M8 12v2" />
+                      </svg>API</div>
+                    <div class="node"><svg viewBox="0 0 16 16" aria-hidden="true">
+                        <path d="M3.8 10a4.7 4.7 0 0 1 8.4 0" />
+                        <path d="M6 12a2.3 2.3 0 0 1 4 0" />
+                        <circle cx="8" cy="13.6" r=".9" fill="currentColor" stroke="none" />
+                      </svg>Streaming</div>
+                    <div class="node"><svg viewBox="0 0 16 16" aria-hidden="true">
+                        <path
+                          d="M4.6 12a3 3 0 0 1-.4-6 3.6 3.6 0 0 1 6.9-1.1A2.7 2.7 0 0 1 14 7.6 2.8 2.8 0 0 1 11.2 10.4L4.6 12Z" />
+                      </svg><span data-i18n="hero.diagram.cloud">Cloud</span></div>
+                    <div class="node"><svg viewBox="0 0 16 16" aria-hidden="true">
+                        <rect x="2" y="2" width="12" height="5" rx="1" />
+                        <rect x="2" y="9" width="12" height="5" rx="1" />
+                        <circle cx="4.5" cy="4.5" r=".7" fill="currentColor" stroke="none" />
+                        <circle cx="4.5" cy="11.5" r=".7" fill="currentColor" stroke="none" />
+                      </svg>Local</div>
+                  </div>
+                </div>
+
+                <div class="col-arrow arrow-1" aria-hidden="true">→</div>
+
+                <div class="col col-pipeline">
+                  <div class="col-h-brand"><svg viewBox="34 56 124 91.5" role="img" aria-label="VektralForge">
+                      <title>VektralForge</title>
+                      <polygon points="40,140 62,140 72.7,100 50.7,100" fill="var(--vf-rust)" />
+                      <polygon points="74,140 96,140 112.6,78 90.6,78" fill="var(--vf-copper)" />
+                      <polygon points="108,140 130,140 152.5,56 130.5,56" fill="var(--vf-clay)" />
+                      <path d="M 34 146.5 L 158 146.5" stroke="var(--vf-axis)" stroke-width="2" stroke-linecap="round"
+                        fill="none" />
+                    </svg><span class="wordmark">Vektral<b>Forge</b></span></div>
+                  <div class="pipe-enclosure">
+                    <div class="pipe-grid">
+                      <div class="node hl"><svg viewBox="0 0 16 16" aria-hidden="true">
+                          <circle cx="3" cy="3" r="1.7" />
+                          <circle cx="3" cy="13" r="1.7" />
+                          <circle cx="13" cy="8" r="1.7" />
+                          <path d="M4.5 4 11.3 7.3M4.5 12 11.3 8.7" />
+                        </svg>Airflow</div>
+                      <div class="node hl"><svg viewBox="0 0 16 16" aria-hidden="true">
+                          <path d="M9.5 1 3.5 9.2h4L6.5 15l6-8.2h-4L9.5 1Z" fill="var(--ink)" stroke="none" />
+                        </svg>Spark</div>
+                      <div class="node hl"><svg viewBox="0 0 16 16" aria-hidden="true" stroke="var(--ink)">
+                          <path d="M8 2 14 5 8 8 2 5Z" />
+                          <path d="M2 8l6 3 6-3M2 11l6 3 6-3" />
+                        </svg>Delta Lake</div>
+                      <div class="node hl"><svg viewBox="0 0 16 16" aria-hidden="true" stroke="var(--ink)">
+                          <circle cx="7" cy="7" r="4.3" />
+                          <path d="M10.3 10.3 14 14" />
+                        </svg>Trino</div>
+                    </div>
+                    <div class="k3s-wrap">
+                      <div class="k3s-ties" aria-hidden="true"><span></span><span></span><span></span><span></span>
+                      </div>
+                      <div class="k3s-bar">
+                        <svg viewBox="0 0 16 16" aria-hidden="true">
+                          <rect x="1" y="9.5" width="4" height="4" rx=".6" />
+                          <rect x="11" y="9.5" width="4" height="4" rx=".6" />
+                          <rect x="6" y="1.5" width="4" height="4" rx=".6" />
+                          <path d="M8 5.5v3M6.2 9.5 7.4 7.6M9.8 9.5 8.6 7.6" />
+                        </svg>
+                        <b data-i18n="hero.diagram.k3s">Runs on K3s</b>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="cloud-wrap">
+                    <p class="cloud-label" data-i18n="hero.diagram.multicloud">Multicloud ready</p>
+                    <div class="cloud-row">
+                      <div class="cloud-chip"><svg viewBox="0 0 16 16" fill="none" stroke="var(--aws)"
+                          stroke-width="1.6" aria-hidden="true">
+                          <path
+                            d="M4.6 12a3 3 0 0 1-.4-6 3.6 3.6 0 0 1 6.9-1.1A2.7 2.7 0 0 1 14 7.6 2.8 2.8 0 0 1 11.2 10.4L4.6 12Z" />
+                        </svg><span>AWS</span></div>
+                      <div class="cloud-chip"><svg viewBox="0 0 16 16" fill="none" stroke="var(--azure)"
+                          stroke-width="1.6" aria-hidden="true">
+                          <path
+                            d="M4.6 12a3 3 0 0 1-.4-6 3.6 3.6 0 0 1 6.9-1.1A2.7 2.7 0 0 1 14 7.6 2.8 2.8 0 0 1 11.2 10.4L4.6 12Z" />
+                        </svg><span>Azure</span></div>
+                      <div class="cloud-chip"><svg viewBox="0 0 16 16" fill="none" stroke="var(--ali)"
+                          stroke-width="1.6" aria-hidden="true">
+                          <path
+                            d="M4.6 12a3 3 0 0 1-.4-6 3.6 3.6 0 0 1 6.9-1.1A2.7 2.7 0 0 1 14 7.6 2.8 2.8 0 0 1 11.2 10.4L4.6 12Z" />
+                        </svg><span>AliCloud</span></div>
+                      <div class="cloud-chip"><svg viewBox="0 0 16 16" fill="none" stroke="var(--gcp)"
+                          stroke-width="1.6" aria-hidden="true">
+                          <path
+                            d="M4.6 12a3 3 0 0 1-.4-6 3.6 3.6 0 0 1 6.9-1.1A2.7 2.7 0 0 1 14 7.6 2.8 2.8 0 0 1 11.2 10.4L4.6 12Z" />
+                        </svg><span>GCP</span></div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="col-arrow arrow-2" aria-hidden="true">→</div>
+
+                <div class="col col-outputs">
+                  <p class="col-h" data-i18n="hero.diagram.usedFor">Used for</p>
+                  <div class="out-grid">
+                    <div class="node"><svg viewBox="0 0 16 16" aria-hidden="true">
+                        <rect x="1.5" y="2.5" width="13" height="11" rx="1" />
+                        <path d="M1.5 6.5h13M6 2.5v11M10.5 2.5v11" />
+                      </svg>Datasets</div>
+                    <div class="node"><svg viewBox="0 0 16 16" aria-hidden="true">
+                        <path d="M2 14V9M6 14V4M10 14V7M14 14V2" />
+                      </svg>Dashboards</div>
+                    <div class="node"><svg viewBox="0 0 16 16" aria-hidden="true">
+                        <path d="M8 1l1.2 4.8L14 7l-4.8 1.2L8 13l-1.2-4.8L2 7l4.8-1.2Z" />
+                      </svg>AI sets</div>
+                    <div class="node"><svg viewBox="0 0 16 16" aria-hidden="true">
+                        <circle cx="3.2" cy="3.2" r="1.2" />
+                        <circle cx="8.4" cy="2.4" r="1.2" />
+                        <circle cx="13" cy="4.8" r="1.2" />
+                        <circle cx="2.4" cy="9" r="1.2" />
+                        <circle cx="7.6" cy="8" r="1.2" />
+                        <circle cx="12.4" cy="10.4" r="1.2" />
+                        <circle cx="4.8" cy="13.4" r="1.2" />
+                        <circle cx="10.4" cy="13.8" r="1.2" />
+                      </svg>BigData</div>
+                  </div>
+                </div>
+
+              </div>
+
+              <p class="flow-caption" data-i18n="hero.flowCaption">OpenLineage traces every step, from your data to what
+                your team ships.</p>
+            </div>
+            <div class="badge-row" aria-label="Project badges">
+              <a href="LICENSE"><img src="https://img.shields.io/badge/license-Apache%202.0-B4552D"
+                  alt="Apache 2.0"></a>
+              <a href="CONTRIBUTING.md"><img src="https://img.shields.io/badge/contributing-DCO-B4552D" alt="DCO"></a>
+              <a href="GOVERNANCE.md"><img src="https://img.shields.io/badge/governance-TSC-B4552D"
+                  alt="Governance"></a>
+              <a href="../../actions/workflows/ci.yml"><img
+                  src="../../actions/workflows/ci.yml/badge.svg?branch=develop" alt="CI"></a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 2. What is VektralForge -->
+    <section id="about" aria-labelledby="about-h">
+      <div class="container">
+        <p class="eyebrow" data-i18n="about.eyebrow">Overview</p>
+        <h2 id="about-h" data-i18n="about.h2">What is VektralForge?</h2>
+        <div class="row gy-4">
+          <div class="col-lg-6">
+            <p data-i18n="about.p1">VektralForge is an open source data lakehouse platform. It wires together the tools
+              most data teams already reach for — orchestration, distributed processing, transactional table storage,
+              SQL querying and dashboards — into a stack you can run with one command, instead of assembling and gluing
+              each piece by hand.</p>
+            <p data-i18n="about.p2">Every step of every pipeline is traced automatically: where data came from, what
+              transformed it and when, and where it ended up. That lineage is a first-class feature, not an add-on you
+              configure later.</p>
+          </div>
+          <div class="col-lg-6">
+            <p data-i18n="about.p3">Run it locally with Docker Compose for development, or deploy it to a production
+              Kubernetes cluster on K3s. The project is licensed under <span class="apache-mark"><i
+                  class="bi bi-feather" aria-hidden="true"></i>Apache 2.0</span>, accepts contributions under a
+              Developer Certificate of Origin rather than a CLA, and is governed independently of its sponsor.</p>
+            <div class="pill-row" aria-label="Core components">
+              <span class="pill"><svg viewBox="0 0 16 16" aria-hidden="true">
+                  <circle cx="3" cy="3" r="1.7" />
+                  <circle cx="3" cy="13" r="1.7" />
+                  <circle cx="13" cy="8" r="1.7" />
+                  <path d="M4.5 4 11.3 7.3M4.5 12 11.3 8.7" />
+                </svg>Airflow</span><span class="pill"><svg viewBox="0 0 16 16" aria-hidden="true">
+                  <path d="M9.5 1 3.5 9.2h4L6.5 15l6-8.2h-4L9.5 1Z" />
+                </svg>Spark</span><span class="pill"><svg viewBox="0 0 16 16" aria-hidden="true">
+                  <path d="M8 2 14 5 8 8 2 5Z" />
+                  <path d="M2 8l6 3 6-3M2 11l6 3 6-3" />
+                </svg>Delta Lake</span>
+              <span class="pill"><svg viewBox="0 0 16 16" aria-hidden="true">
+                  <circle cx="7" cy="7" r="4.3" />
+                  <path d="M10.3 10.3 14 14" />
+                </svg>Trino</span><span class="pill"><svg viewBox="0 0 16 16" aria-hidden="true">
+                  <ellipse cx="8" cy="3.5" rx="5.5" ry="2" />
+                  <path d="M2.5 3.5v9c0 1.1 2.5 2 5.5 2s5.5-.9 5.5-2v-9" />
+                  <path d="M2.5 8c0 1.1 2.5 2 5.5 2s5.5-.9 5.5-2" />
+                </svg>MinIO</span><span class="pill"><svg viewBox="0 0 16 16" aria-hidden="true">
+                  <path d="M2 14V8M6 14V3M10 14V10M14 14V5" />
+                </svg>Superset</span>
+              <span class="pill"><svg viewBox="0 0 16 16" aria-hidden="true">
+                  <circle cx="2.5" cy="8" r="1.3" />
+                  <path d="M4 8h4" />
+                  <circle cx="9.5" cy="8" r="1.3" />
+                  <path d="M11 8h2.5M13.5 8l-1.5-1.5M13.5 8l-1.5 1.5" />
+                </svg>OpenLineage</span><span class="pill"><svg viewBox="0 0 16 16" aria-hidden="true">
+                  <rect x="3.5" y="7" width="9" height="7" rx="1.2" />
+                  <path d="M5.5 7V4.8a2.5 2.5 0 0 1 5 0V7" />
+                </svg>OpenBao</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 3. Platform Architecture -->
+    <section id="architecture" class="alt" aria-labelledby="arch-h">
+      <div class="container">
+        <p class="eyebrow" data-i18n="arch.eyebrow">Architecture</p>
+        <h2 id="arch-h" data-i18n="arch.h2">Platform architecture</h2>
+        <p class="section-lede" data-i18n="arch.lede">Spark writes, Trino reads. ACID operations on Delta Lake —
+          <code>MERGE</code>, <code>UPDATE</code>, <code>DELETE</code>, <code>VACUUM</code> — run through Spark; Trino
+          gives you interactive SQL over the same tables through one shared Hive Metastore, so a table Spark writes is
+          queryable from Trino without registering it twice.
+        </p>
+        <div class="arch-diagram">
+          <div class="arch-layer l3"><span class="dot" aria-hidden="true"></span><span class="name"
+              data-i18n="arch.service.name">Service</span><span class="desc" data-i18n="arch.service.desc">Airflow
+              orchestration · Superset dashboards · OpenLineage / Marquez lineage</span></div>
+          <div class="arch-layer l2"><span class="dot" aria-hidden="true"></span><span class="name"
+              data-i18n="arch.compute.name">Compute</span><span class="desc" data-i18n="arch.compute.desc">Spark writes
+              (ACID) · Trino queries · one shared Hive Metastore</span></div>
+          <div class="arch-layer l1"><span class="dot" aria-hidden="true"></span><span class="name"
+              data-i18n="arch.storage.name">Storage</span><span class="desc" data-i18n="arch.storage.desc">Delta Lake
+              tables on MinIO — any S3-compatible backend works</span></div>
+          <div class="arch-layer l4"><span class="dot" aria-hidden="true"></span><span class="name"
+              data-i18n="arch.platform.name">Platform</span><span class="desc" data-i18n="arch.platform.desc">Docker
+              Compose for local development · K3s for production</span></div>
+        </div>
+        <p class="section-note" data-i18n="arch.note">Data moves through medallion layers — <code>raw</code> (unmodified
+          source response), <code>bronze</code> (typed Delta tables), <code>silver</code> (cleaned, deduplicated models)
+          and <code>gold</code> (aggregates ready for dashboards).</p>
+      </div>
+    </section>
+
+    <!-- 4. Features -->
+    <section id="features" aria-labelledby="feat-h">
+      <div class="container">
+        <p class="eyebrow" data-i18n="feat.eyebrow">Features</p>
+        <h2 id="feat-h" data-i18n="feat.h2">Everything the stack gives you</h2>
+        <p class="section-lede" data-i18n="feat.lede">Not a checklist of integrations — a working stack, with two real
+          pipelines already inside it.</p>
+        <div class="row g-4">
+          <div class="col-md-6 col-lg-4">
+            <div class="feat-card">
+              <div class="feat-icon" aria-hidden="true"><span></span></div>
+              <h3 data-i18n="feat.card1.h3">Two real pipelines, no credentials</h3>
+              <p data-i18n="feat.card1.p">Chilean financial indicators from mindicador.cl and municipal climate-risk
+                data from ARClim — both public APIs, so anyone who clones the repository can run the full pipelines
+                without registering anywhere.</p>
+            </div>
+          </div>
+          <div class="col-md-6 col-lg-4">
+            <div class="feat-card">
+              <div class="feat-icon" aria-hidden="true"><span></span></div>
+              <h3 data-i18n="feat.card2.h3">Lineage from source to dashboard</h3>
+              <p data-i18n="feat.card2.p">OpenLineage and Marquez capture lineage at every step automatically — no
+                manual instrumentation of your DAGs or Spark jobs required.</p>
+            </div>
+          </div>
+          <div class="col-md-6 col-lg-4">
+            <div class="feat-card">
+              <div class="feat-icon" aria-hidden="true"><span></span></div>
+              <h3 data-i18n="feat.card3.h3">ACID lakehouse tables</h3>
+              <p data-i18n="feat.card3.p">Delta Lake on MinIO gives you transactional guarantees on object storage —
+                Spark writes, Trino reads, one metastore shared between both.</p>
+            </div>
+          </div>
+          <div class="col-md-6 col-lg-4">
+            <div class="feat-card">
+              <div class="feat-icon" aria-hidden="true"><span></span></div>
+              <h3 data-i18n="feat.card4.h3">Local-to-production parity</h3>
+              <p data-i18n="feat.card4.p">The same stack that runs on your laptop with Docker Compose is the one
+                designed to run in production on K3s — no separate dev-only architecture.</p>
+            </div>
+          </div>
+          <div class="col-md-6 col-lg-4">
+            <div class="feat-card">
+              <div class="feat-icon" aria-hidden="true"><span></span></div>
+              <h3 data-i18n="feat.card5.h3">Secrets stay out of the repo</h3>
+              <p data-i18n="feat.card5.p">Nothing ships hardcoded. Local development uses a generated <code>.env</code>;
+                production secrets management with OpenBao is on the roadmap.</p>
+            </div>
+          </div>
+          <div class="col-md-6 col-lg-4">
+            <div class="feat-card">
+              <div class="feat-icon" aria-hidden="true"><span></span></div>
+              <h3 data-i18n="feat.card6.h3"><span class="apache-mark"><i class="bi bi-feather"
+                    aria-hidden="true"></i>Apache 2.0</span>, DCO, no CLA</h3>
+              <p data-i18n="feat.card6.p">Copyright stays distributed across every contributor. Relicensing the project
+                would require unanimous consent — which is what makes the open source promise structural, not just a
+                stated intention.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 5. Sponsors -->
+    <section id="sponsors" class="alt" aria-labelledby="spon-h">
+      <div class="container">
+        <p class="eyebrow" data-i18n="spon.eyebrow">Sponsors</p>
+        <h2 id="spon-h" data-i18n="spon.h2">Those who make this community project possible</h2>
+        <div class="sponsor-box">
+          <div class="sponsor-head">
+            <div>
+              <h4 data-i18n="spon.h4"><i class="bi bi-award-fill" aria-hidden="true"></i>Founding Sponsor — Aleph Server
+              </h4>
+              <p data-i18n="spon.p">An IT infrastructure consultancy based in Chile, Aleph Server created VektralForge
+                and funds its ongoing development. Sponsorship buys visibility and gratitude — it does not buy a veto, a
+                casting vote, or a reserved seat on the Technical Steering Committee.</p>
+              <div class="sponsor-contact">
+                <a href="https://alephserver.cl" target="_blank" rel="noopener"><i class="bi bi-globe"
+                    aria-hidden="true"></i>alephserver.cl</a>
+                <a href="https://www.linkedin.com/company/aleph-server/" target="_blank" rel="noopener"><i
+                    class="bi bi-linkedin" aria-hidden="true"></i>LinkedIn</a>
+              </div>
+            </div>
+            <div class="sponsor-logo-col">
+              <div class="sponsor-logo" aria-label="Aleph Server logo">
+                <img src="assets/img/sponsor-alephserver.png" width="145" height="46" alt="Aleph Server logo">
+              </div>
+              <div class="sponsor-badges" aria-label="Commercial services from Aleph Server">
+                <span class="sponsor-badge" data-i18n="spon.badge.consulting"><i class="bi bi-briefcase-fill"
+                    aria-hidden="true"></i>Consulting</span>
+                <span class="sponsor-badge" data-i18n="spon.badge.support"><i class="bi bi-headset"
+                    aria-hidden="true"></i>Support</span>
+                <span class="sponsor-badge" data-i18n="spon.badge.hosting"><i class="bi bi-cloud-arrow-up-fill"
+                    aria-hidden="true"></i>Cloud Hosting</span>
+              </div>
+            </div>
+          </div>
+
+          <p class="sponsor-cta"><span data-i18n="spon.cta">Interested in sponsoring VektralForge — get in touch
+              at</span> <span class="email-obf" data-u="b3BlbnNvdXJjZQ==" data-d="dmVrdHJhbGZvcmdlLm9yZw=="></span></p>
+        </div>
+    </section>
+
+    <!-- 6. Documentation -->
+    <section id="documentation" aria-labelledby="doc-h">
+      <div class="container">
+        <p class="eyebrow" data-i18n="doc.eyebrow">Documentation</p>
+        <h2 id="doc-h" data-i18n="doc.h2">Learn how to use the stack</h2>
+        <p class="section-lede" data-i18n="doc.lede">Start here, then go as deep as you need.</p>
+        <div class="row g-3">
+          <div class="col-sm-6 col-lg-3">
+            <div class="doc-card">
+              <span class="tag">Lab</span>
+              <h4 data-i18n="doc.lab.h4">Easy examples to start</h4>
+              <p data-i18n="doc.lab.p">Download the library of ready-to-use examples to get started with
+                <code>make dev-load-example</code>.
+              </p>
+            </div>
+          </div>
+          <div class="col-sm-6 col-lg-3">
+            <a class="doc-card" href="https://github.com/vektralforge/vektralforge/blob/main/docs/architecture.md"
+              target="_blank" rel="noopener">
+              <span class="tag" data-i18n="doc.guide.tag"><i class="bi bi-github" aria-hidden="true"></i>Guide</span>
+              <h4 data-i18n="doc.guide.h4">Architecture</h4>
+              <p data-i18n="doc.guide.p">Data flow, service layout, CI/CD, hardware sizing.</p>
+            </a>
+          </div>
+          <div class="col-sm-6 col-lg-3">
+            <a class="doc-card" href="https://github.com/vektralforge/vektralforge/blob/main/CONTRIBUTING.md"
+              target="_blank" rel="noopener">
+              <span class="tag" data-i18n="doc.ref.tag"><i class="bi bi-github" aria-hidden="true"></i>Reference</span>
+              <h4 data-i18n="doc.ref.h4">Contributing</h4>
+              <p data-i18n="doc.ref.p">DCO sign-off, coding conventions, pull request flow.</p>
+            </a>
+          </div>
+          <div class="col-sm-6 col-lg-3">
+            <a class="doc-card" href="https://github.com/vektralforge/vektralforge/blob/main/SECURITY.md"
+              target="_blank" rel="noopener">
+              <span class="tag" data-i18n="doc.policy.tag"><i class="bi bi-github" aria-hidden="true"></i>Policy</span>
+              <h4 data-i18n="doc.policy.h4">Security</h4>
+              <p data-i18n="doc.policy.p">Private vulnerability reporting and disclosure timeline.</p>
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 7. Quick Start -->
+    <section id="quickstart" class="alt" aria-labelledby="qs-h">
+      <div class="container">
+        <p class="eyebrow" data-i18n="qs.eyebrow">Quick Start</p>
+        <h2 id="qs-h" data-i18n="qs.h2">Up and running in under 5 minutes</h2>
+        <p class="section-lede" data-i18n="qs.lede">No complicated setup and nothing to request first — clone the
+          repository or pull the image, run one command, and the full stack is live.</p>
+        <div class="row g-4">
+          <div class="col-lg-6">
+            <div class="console" aria-label="Clone from GitHub, terminal example">
+              <div class="console-bar"><span></span><span></span><span></span><b data-i18n="qs.console1.header">Clone
+                  from GitHub</b></div>
+              <pre
+                class="console-body"><code><span class="c-cmd">git clone</span> https://github.com/vektralforge/vektralforge.git
+<span class="c-cmd">cd</span> vektralforge
+<span class="c-cmd">make init-env</span>          <span class="c-cmt" data-i18n="qs.console1.cmt1"># Generate keys and prompt for passwords</span>
+<span class="c-cmd">make setup</span>             <span class="c-cmt" data-i18n="qs.console1.cmt2"># Create the .venv with Python 3.12</span>
+<span class="c-cmd">make dev-up</span>            <span class="c-cmt" data-i18n="qs.console1.cmt3"># Bring the stack up</span></code></pre>
+            </div>
+          </div>
+          <div class="col-lg-6">
+            <div class="console" aria-label="Docker Hub, terminal example">
+              <div class="console-bar"><span></span><span></span><span></span><b>Docker Hub</b></div>
+              <pre
+                class="console-body"><code><span class="c-cmd">docker pull</span> vektralforge   <span class="c-cmt" data-i18n="qs.console2.cmt1"># Pull the image</span>
+<span class="c-cmd">docker run</span> vektralforge    <span class="c-cmt" data-i18n="qs.console2.cmt2"># Bring the stack up</span></code></pre>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 8. Roadmap -->
+    <section id="roadmap" aria-labelledby="road-h">
+      <div class="container">
+        <p class="eyebrow" data-i18n="road.eyebrow">Roadmap</p>
+        <h2 id="road-h" data-i18n="road.h2">Where the project is going</h2>
+        <p class="section-lede" data-i18n="road.lede">Dates depend on maintainer availability — the repository issues
+          track what's actually in progress.</p>
+        <div class="row g-4 road">
+          <div class="col-md-6 col-lg-3">
+            <div class="road-item done">
+              <div class="road-dot" aria-hidden="true"></div><span class="status"
+                data-i18n="road.p1.status">Shipped</span>
+              <h4 data-i18n="road.p1.h4">Phase 1 — Foundation</h4>
+              <p data-i18n="road.p1.p">Local stack, two pipelines, lineage, CI, governance.</p>
+            </div>
+          </div>
+          <div class="col-md-6 col-lg-3">
+            <div class="road-item next">
+              <div class="road-dot" aria-hidden="true"></div><span class="status" data-i18n="road.p2.status">In
+                progress</span>
+              <h4 data-i18n="road.p2.h4">Phase 2 — Production</h4>
+              <p data-i18n="road.p2.p">K3s deployment, managed secrets, Kafka streaming.</p>
+            </div>
+          </div>
+          <div class="col-md-6 col-lg-3">
+            <div class="road-item later">
+              <div class="road-dot" aria-hidden="true"></div><span class="status"
+                data-i18n="road.p3.status">Planned</span>
+              <h4 data-i18n="road.p3.h4">Phase 3 — Maturity</h4>
+              <p data-i18n="road.p3.p">Data quality checks, metrics, unified access control.</p>
+            </div>
+          </div>
+          <div class="col-md-6 col-lg-3">
+            <div class="road-item later">
+              <div class="road-dot" aria-hidden="true"></div><span class="status"
+                data-i18n="road.p4.status">Exploration</span>
+              <h4 data-i18n="road.p4.h4">Phase 4 — Exploration</h4>
+              <p data-i18n="road.p4.p">Natural-language query over the catalog.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 9. Community -->
+    <section id="community" class="alt" aria-labelledby="comm-h">
+      <div class="container">
+        <p class="eyebrow" data-i18n="comm.eyebrow">Community</p>
+        <h2 id="comm-h" data-i18n="comm.h2">Join the community</h2>
+        <div class="row g-4">
+          <div class="col-md-4">
+            <div class="comm-card">
+              <h4 data-i18n="comm.card1.h4">Contribute</h4>
+              <p data-i18n="comm.card1.p">Open an issue before anything beyond a typo or obvious fix. Issues labelled
+                <code>good first issue</code> are a good place to start; every commit needs a DCO sign-off.
+              </p>
+              <a href="https://github.com/vektralforge/vektralforge/blob/main/CONTRIBUTING.md" target="_blank"
+                rel="noopener" data-i18n="comm.card1.link"><i class="bi bi-github" aria-hidden="true"></i>Read the
+                contributing guide →</a>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="comm-card">
+              <h4 data-i18n="comm.card2.h4">Try it and give us your feedback</h4>
+              <p data-i18n="comm.card2.p">Spin up the stack in a few minutes and tell us what worked, what didn't, and
+                what you'd build next — early feedback shapes the roadmap.</p>
+              <a href="#quickstart" data-i18n="comm.card2.link">Jump to Quick Start →</a>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="comm-card">
+              <h4 data-i18n="comm.card3.h4">Code of Conduct</h4>
+              <p data-i18n="comm.card3.p">VektralForge follows the Contributor Covenant. Participation in every project
+                space is expected to stay respectful and harassment-free.</p>
+              <a href="https://github.com/vektralforge/vektralforge/blob/main/CODE_OF_CONDUCT.md" target="_blank"
+                rel="noopener" data-i18n="comm.card3.link"><i class="bi bi-github" aria-hidden="true"></i>Read the Code
+                of Conduct →</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- 10. Footer -->
+  <footer>
+    <div class="container">
+      <div class="row gy-4 foot-grid">
+        <div class="col-lg-3">
+          <a class="navbar-brand" href="#top" aria-label="VektralForge home">
+            <svg width="22" height="22" viewBox="34 56 124 91.5" role="img" aria-hidden="true">
+              <polygon points="40,140 62,140 72.7,100 50.7,100" fill="#7E3A1E" />
+              <polygon points="74,140 96,140 112.6,78 90.6,78" fill="#B4552D" />
+              <polygon points="108,140 130,140 152.5,56 130.5,56" fill="#D2703F" />
+              <path d="M 34 146.5 L 158 146.5" stroke="#5B7076" stroke-width="2" stroke-linecap="round" fill="none" />
+            </svg>
+            <span>Vektral<em>Forge</em></span>
+          </a>
+          <p class="foot-tagline" data-i18n="foot.tagline">Lakehouse open source stack, with lineage built in.</p>
+        </div>
+        <div class="col-6 col-lg-3">
+          <h5 data-i18n="foot.projectHeader">Project</h5>
+          <a href="https://github.com/vektralforge/vektralforge" target="_blank" rel="noopener"><i class="bi bi-github"
+              aria-hidden="true"></i>GitHub</a>
+          <a href="https://github.com/vektralforge/vektralforge/blob/main/LICENSE" target="_blank" rel="noopener"
+            data-i18n="foot.apacheLicenseLink"><i class="bi bi-feather" aria-hidden="true"></i>Apache 2.0 License</a>
+          <a href="https://github.com/vektralforge/vektralforge/blob/main/GOVERNANCE.md" target="_blank" rel="noopener"
+            data-i18n="foot.governanceLink">Governance</a>
+        </div>
+        <div class="col-6 col-lg-3">
+          <h5 data-i18n="foot.communityHeader">Community</h5>
+          <a href="https://github.com/vektralforge/vektralforge/blob/main/CONTRIBUTING.md" target="_blank"
+            rel="noopener" data-i18n="foot.contributingLink">Contributing</a>
+          <a href="https://github.com/vektralforge/vektralforge/blob/main/CODE_OF_CONDUCT.md" target="_blank"
+            rel="noopener" data-i18n="foot.cocLink">Code of Conduct</a>
+          <a href="https://github.com/vektralforge/vektralforge/blob/main/SECURITY.md" target="_blank" rel="noopener"
+            data-i18n="foot.securityLink">Security Policy</a>
+        </div>
+        <div class="col-12 col-lg-3">
+          <div class="camp-banner">
+            <div class="camp-banner-head"><i class="bi bi-megaphone-fill" aria-hidden="true"></i>
+              <h5 data-i18n="foot.campHeading">Bring VektralForge to your organization</h5>
+            </div>
+            <p data-i18n="foot.campP">Would you like to discuss the benefits of using open-source lakehouse tools? We'd
+              be happy to help you spread the word and introduce our project to your organization.</p>
+            <p class="camp-banner-mail"><span class="email-obf" data-u="b3BlbnNvdXJjZQ=="
+                data-d="dmVrdHJhbGZvcmdlLm9yZw=="></span></p>
+          </div>
+        </div>
+      </div>
+
+      <div class="foot-bottom">
+        <span><span class="apache-mark"><i class="bi bi-feather" aria-hidden="true"></i>Apache 2.0</span> · Copyright ©
+          <span id="year"></span> The VektralForge Authors</span>
+        <span data-i18n="foot.sponsoredLine">Sponsored by <a href="https://alephserver.cl" target="_blank"
+            rel="noopener">Aleph Server</a> — funded, not controlled.</span>
+      </div>
+      <p class="foot-disclaimer" data-i18n="foot.disclaimer">Kubernetes, K3s, GitHub, Docker, the Apache Software
+        Foundation feather logo, LinkedIn, AWS, Microsoft Azure, Alibaba Cloud and Google Cloud names and icons are
+        trademarks of their respective owners. VektralForge is not affiliated with, sponsored by, or endorsed by any of
+        them; they are referenced solely to indicate platform, tooling and service compatibility. Apache Airflow, Apache
+        Spark, Delta Lake, Trino, MinIO, Superset, OpenLineage, Marquez and OpenBao are trademarks of their respective
+        projects; their names and icons on this page identify the open source components VektralForge integrates, not an
+        endorsement by those projects.</p>
+    </div>
+  </footer>
+
+  <script src="assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+  <script src="assets/js/i18n.js"></script>
+  <script src="assets/js/main.js"></script>
+</body>
+
+</html>
