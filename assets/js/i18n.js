@@ -50,7 +50,7 @@
       "arch.compute.name": "Cómputo",
       "arch.compute.desc": "Escritura con Spark (ACID) · Consultas con Trino · un Hive Metastore compartido",
       "arch.storage.name": "Almacenamiento",
-      "arch.storage.desc": "Tablas Delta Lake sobre MinIO — funciona con cualquier backend compatible con S3",
+      "arch.storage.desc": "Tablas Delta Lake sobre RustFS — funciona con cualquier backend compatible con S3",
       "arch.platform.name": "Plataforma",
       "arch.platform.desc": "Docker Compose para desarrollo local · K3s para producción",
       "arch.note": "Los datos avanzan por capas medallion — <code>raw</code> (respuesta de origen sin modificar), <code>bronze</code> (tablas Delta tipadas), <code>silver</code> (modelos limpios y deduplicados) y <code>gold</code> (agregados listos para dashboards).",
@@ -63,7 +63,7 @@
       "feat.card2.h3": "Linaje desde el origen hasta el dashboard",
       "feat.card2.p": "OpenLineage y Marquez capturan el linaje en cada paso automáticamente — no necesitas instrumentar manualmente tus DAGs ni tus jobs de Spark.",
       "feat.card3.h3": "Tablas lakehouse ACID",
-      "feat.card3.p": "Delta Lake sobre MinIO* te da garantías transaccionales sobre almacenamiento de objetos — Spark escribe, Trino lee, un metastore compartido entre ambos.",
+      "feat.card3.p": "Delta Lake sobre RustFS te da garantías transaccionales sobre almacenamiento de objetos — Spark escribe, Trino lee, un metastore compartido entre ambos.",
       "feat.card4.h3": "Paridad entre local y producción",
       "feat.card4.p": "El mismo stack que corre en tu laptop con Docker Compose es el que está diseñado para correr en producción con K3s — sin una arquitectura separada solo para desarrollo.",
       "feat.card5.h3": "Los secretos no entran al repositorio",
@@ -83,8 +83,7 @@
       "doc.eyebrow": "Documentación",
       "doc.h2": "Aprende a usar el stack",
       "doc.lede": "Empieza aquí y profundiza tanto como necesites.",
-      "doc.lab.h4": "Ejemplos fáciles para empezar",
-      "doc.lab.p": "Descarga la biblioteca de ejemplos listos para usar y comienza con <code>make dev-load-example</code>.",
+      "doc.lab.h4": "Biblioteca de ejemplos lista para usar",
       "doc.guide.tag": '<i class="bi bi-github" aria-hidden="true"></i>Guía',
       "doc.guide.h4": "Arquitectura",
       "doc.guide.p": "Flujo de datos, distribución de servicios, CI/CD, dimensionamiento de hardware.",
@@ -144,7 +143,7 @@
       "foot.campHeading": "Lleva VektralForge a tu organización",
       "foot.campP": "¿Te gustaría conversar sobre los beneficios de usar herramientas lakehouse de código abierto? Con gusto te ayudamos a difundirlo y presentar nuestro proyecto en tu organización.",
       "foot.sponsoredLine": 'Patrocinado por <a href="https://alephserver.cl" target="_blank" rel="noopener">Aleph Server</a> — financiado, no controlado.',
-      "foot.disclaimer": "Kubernetes, K3s, GitHub, Docker, el logo de pluma de la Apache Software Foundation, LinkedIn, AWS, Microsoft Azure, Alibaba Cloud y Google Cloud, sus nombres e íconos, son marcas registradas de sus respectivos dueños. VektralForge no está afiliado, patrocinado ni respaldado por ninguno de ellos; se mencionan únicamente para indicar compatibilidad de plataforma, herramientas y servicios. Apache Airflow, Apache Spark, Delta Lake, Trino, MinIO, Superset, OpenLineage, Marquez y OpenBao son marcas de sus respectivos proyectos; sus nombres e íconos en esta página identifican los componentes de código abierto que integra VektralForge, no un respaldo de esos proyectos."
+      "foot.disclaimer": "Kubernetes, K3s, GitHub, Docker, el logo de pluma de la Apache Software Foundation, LinkedIn, AWS, Microsoft Azure, Alibaba Cloud y Google Cloud, sus nombres e íconos, son marcas registradas de sus respectivos dueños. VektralForge no está afiliado, patrocinado ni respaldado por ninguno de ellos; se mencionan únicamente para indicar compatibilidad de plataforma, herramientas y servicios. Apache Airflow, Apache Spark, Delta Lake, Trino, RustFS, Superset, OpenLineage, Marquez y OpenBao son marcas de sus respectivos proyectos; sus nombres e íconos en esta página identifican los componentes de código abierto que integra VektralForge, no un respaldo de esos proyectos."
    };
 
    var EN = null; // captured live from the DOM on first run — always matches the authored HTML exactly

@@ -31,6 +31,19 @@ footer .navbar-brand em{color:var(--vf-clay)}
 .btn-outline-nav:hover{border-color:var(--slate); color:var(--ink)}
 .btn i{font-size:1.05em}
 
+/* Version badge — a small hand-built pill clipped onto the GitHub button's top-right
+   corner, like a price tag. It's graphically part of the button (positioned relative
+   to it, not a separate element floating above), with its own oat "cutout" ring so it
+   reads as pinned-on rather than just overlapping, and a slow pulse to catch the eye
+   without being obnoxious. Update the "v0.2.0" text by hand on each tagged release. */
+.gh-btn{position:relative; overflow:visible}
+.gh-version-badge{position:absolute; top:-11px; right:-9px; background:var(--ember); color:var(--white);
+ font-family:'Space Grotesk',system-ui,sans-serif; font-size:11px; font-weight:700; letter-spacing:.2px;
+ line-height:1; padding:4px 8px; border-radius:999px; border:2.5px solid var(--oat);
+ box-shadow:0 3px 8px rgba(14,20,24,.22); animation:vf-badge-pulse 2.6s ease-in-out infinite}
+@keyframes vf-badge-pulse{0%,100%{transform:scale(1)} 50%{transform:scale(1.1)}}
+@media (prefers-reduced-motion:reduce){ .gh-version-badge{animation:none} }
+
 /* Language switch — content-only translation toggle, next to the GitHub button */
 .lang-switch{display:flex; align-items:center; gap:6px; font-size:12.5px}
 .lang-switch .lang-sep{color:#c9c2b2}
@@ -38,6 +51,19 @@ footer .navbar-brand em{color:var(--vf-clay)}
 .lang-btn:hover{color:var(--ink)}
 .lang-btn.is-active{color:var(--emberdark)}
 .lang-btn:focus-visible{outline:2px solid var(--navy); outline-offset:2px}
+
+/* Lg-tier only (992–1199.98px): navbar-expand-lg switches to the always-visible,
+   single-row nav right at 992px, but brand + 6 links + lang switch + GitHub button
+   don't fit the narrower lg container — tighten spacing just in this band so the whole
+   row fits on one line; xl+ (1200px) already has room to breathe. */
+@media (min-width:992px) and (max-width:1199.98px){
+ .navbar-brand{font-size:16px; gap:5px}
+ .nav-link{padding:8px 6px !important; font-size:14px}
+ .navbar-collapse > .d-flex{gap:.3rem !important; margin-left:.3rem !important}
+ .btn-outline-nav{padding:8px 10px; font-size:13.5px}
+ .lang-switch{font-size:11px; gap:3px}
+ .gh-version-badge{font-size:9.5px; padding:3px 6px; top:-9px; right:-7px; border-width:2px}
+}
 
 /* Hero secondary button — solid, so it stands out against the navy/charcoal gradient */
 .btn-hero-alt{background:var(--oat); color:var(--charcoal); border:none; border-radius:999px; font-weight:600; padding:10px 22px}
@@ -53,13 +79,15 @@ footer .navbar-brand em{color:var(--vf-clay)}
 .badge-emph{color:var(--teal); font-weight:700; display:inline-flex; align-items:center; gap:4px}
 .badge-emph i{font-size:.95em}
 
-.trust-trio{margin-top:4px; overflow-x:auto; padding-bottom:4px; -webkit-overflow-scrolling:touch; -webkit-mask-image:linear-gradient(to right, #000 92%, transparent 100%); mask-image:linear-gradient(to right, #000 92%, transparent 100%)}
-.trust-trio > div{display:flex; align-items:center; gap:9px; font-size:13px; font-weight:600; color:#c7d2e6; white-space:nowrap; flex-shrink:0}
-.trust-trio i{font-size:17px; color:var(--amber); flex-shrink:0}
-@media (max-width:767.98px){
- .trust-trio{gap:.9rem !important}
- .trust-trio > div{font-size:12px; gap:7px}
- .trust-trio i{font-size:15px}
+/* Trust trio — three/four short trust markers next to the hero CTA. Kept to a single
+   nowrap row on wide screens; wraps to two lines (not a clipped scroll) under 576px so
+   a longer translation never gets cut off silently. */
+.trust-trio{flex-wrap:wrap; row-gap:10px}
+.trust-trio > div{display:flex; align-items:center; gap:8px; font-size:13px; font-weight:600; color:#c7d2e6; white-space:nowrap}
+.trust-trio i{font-size:16px; color:var(--amber); flex-shrink:0}
+@media (max-width:575.98px){
+ .trust-trio{flex-wrap:wrap; gap:10px !important}
+ .trust-trio > div{font-size:12px}
 }
 
 .badge-row{display:flex; flex-wrap:wrap; gap:8px; margin-top:16px; justify-content:center}
@@ -187,6 +215,29 @@ h2{font-size:clamp(26px,3vw,32px); margin-bottom:16px}
 .pill{display:inline-flex; align-items:center; gap:6px; font-size:12px; padding:7px 14px; border:1px solid #d7d1c4; border-radius:999px; color:var(--slate); background:var(--white)}
 .pill svg{width:13px; height:13px; stroke:currentColor; fill:none; stroke-width:1.4; stroke-linecap:round; stroke-linejoin:round; flex-shrink:0; color:var(--emberdark)}
 
+/* Logo marquee — "built with" strip of every stack component, grayscale, under the
+   "What is VektralForge?" heading. Content is duplicated once in the markup (two
+   .logo-track rows back to back) and the track is translated by exactly -50% so the
+   loop is seamless; a fade mask on the ends hides the hard edges. The duplicate row is
+   aria-hidden so screen readers only hear the list once. */
+.logo-marquee{overflow:hidden; margin:24px 0 36px; -webkit-mask-image:linear-gradient(90deg,transparent,#000 6%,#000 94%,transparent); mask-image:linear-gradient(90deg,transparent,#000 6%,#000 94%,transparent)}
+.logo-marquee{display:flex}
+.logo-track{display:flex; align-items:center; gap:44px; flex-shrink:0; padding-right:44px; animation:vf-marquee 26s linear infinite}
+.logo-item{display:inline-flex; align-items:center; gap:9px; font-size:13.5px; font-weight:600; color:#aab1bf; white-space:nowrap}
+/* Real product marks (official logos) ship in full color; we desaturate them to
+   keep the strip calm and legible, and let them bloom into brand color on hover
+   as a small reward for stopping to look. */
+.logo-item svg, .logo-item img{height:22px; width:auto; flex-shrink:0; filter:grayscale(1) opacity(.72); transition:filter .2s ease}
+.logo-item--wordmark svg{height:17px}
+.logo-item:hover svg, .logo-item:hover img{filter:none}
+@keyframes vf-marquee{from{transform:translateX(0)} to{transform:translateX(-100%)}}
+.logo-marquee:hover .logo-track{animation-play-state:paused}
+@media (prefers-reduced-motion:reduce){
+ .logo-track{animation:none}
+ .logo-marquee{flex-wrap:wrap; -webkit-mask-image:none; mask-image:none}
+ .logo-track:last-child{display:none}
+}
+
 /* Architecture */
 .arch-diagram{background:var(--white); border-radius:var(--radius); padding:28px; box-shadow:0 12px 30px rgba(14,20,24,.05)}
 .arch-layer{display:flex; align-items:center; gap:16px; padding:16px 20px; border-radius:12px; margin-bottom:10px; background:var(--oat)}
@@ -210,9 +261,44 @@ a.doc-card:hover{transform:translateY(-3px)}
 .doc-card h4{font-size:15px; margin-bottom:6px; color:var(--ink)}
 .doc-card p{color:var(--slate); margin:0}
 
+/* Title row for a doc-card whose h4 needs an inline badge beside it (currently just
+   the Architecture card's "In Spanish" note) instead of stacked underneath. */
+.doc-card-head{display:flex; align-items:center; flex-wrap:wrap; gap:8px; margin-bottom:6px}
+.doc-card-head h4{margin-bottom:0}
+
+/* Lab card — compact terminal mockup under the eyebrow/heading, looping a slow
+   typing animation of the actual onboarding command. Purely decorative
+   (aria-hidden), so it never enters the i18n or screen-reader flow. */
+.lab-shell{margin-top:14px; background:var(--ink); border-radius:10px; overflow:hidden}
+.lab-shell-bar{display:flex; gap:5px; padding:7px 10px; background:rgba(244,241,236,.06)}
+.lab-shell-bar span{width:7px; height:7px; border-radius:50%; background:rgba(244,241,236,.18)}
+.lab-shell-bar span:nth-child(1){background:#FF5F56}
+.lab-shell-bar span:nth-child(2){background:#FFBD2E}
+.lab-shell-bar span:nth-child(3){background:#27C93F}
+.lab-shell-body{padding:11px 12px; font-family:'JetBrains Mono',monospace; font-size:11.5px; color:#dfe4f0; white-space:nowrap; overflow:hidden}
+.lab-shell-prompt{color:var(--vf-clay); font-weight:600}
+.lab-shell-cmd{display:inline-block; overflow:hidden; white-space:nowrap; vertical-align:bottom; width:0; animation:vf-type 8s steps(22,end) infinite}
+.lab-shell-cursor{display:inline-block; width:6px; height:12px; background:#dfe4f0; margin-left:2px; vertical-align:middle; animation:vf-blink .9s step-end infinite}
+@keyframes vf-type{0%{width:0} 55%{width:21ch} 88%{width:21ch} 100%{width:0}}
+@keyframes vf-blink{0%,49%{opacity:1} 50%,100%{opacity:0}}
+@media (prefers-reduced-motion:reduce){
+ .lab-shell-cmd{animation:none; width:21ch}
+ .lab-shell-cursor{animation:none}
+}
+
 /* Inline "Apache" mark — feather icon wherever the Apache 2.0 license is named */
 .apache-mark{display:inline-flex; align-items:center; gap:4px}
 .apache-mark i{font-size:.9em}
+
+/* "In Spanish" note — flags a linked doc that isn't in the reader's current language.
+   Sits inline beside the card's h4 (see .doc-card-head) rather than stacked below it.
+   Lives outside any data-i18n element on purpose: visibility is driven purely by the
+   <html lang> attribute the i18n script already sets, so it survives dictionary edits
+   and needs no translation entry of its own. English default on load keeps it visible
+   until (and unless) Spanish is selected. */
+.lang-note{display:inline-flex; align-items:center; gap:4px; font-size:10.5px; font-weight:700; letter-spacing:.3px; text-transform:uppercase; color:var(--slate); background:rgba(74,85,96,.08); border-radius:999px; padding:3px 9px}
+.lang-note i{font-size:11px}
+html[lang="es"] .lang-note{display:none}
 
 /* Roadmap */
 .road-item{background:var(--oat); border-radius:14px; padding:22px; height:100%}
